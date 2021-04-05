@@ -9,6 +9,7 @@ const db = require('./config/db');
 db.sync().then(() => console.log('DB OK')).catch((error) => console.log(error));
 
 require('dotenv').config({path: '.env'});
+require('./models/Usuarios');
 
 const app = express();
 

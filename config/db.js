@@ -9,5 +9,6 @@ module.exports = new Sequelize('meeti', 'postgres', '112358-*/A', {
         min: 0,
         acquire: 30000,
         idle: 10000
-    }
+    },
+    logging: false //quitar la salida del query
 })
