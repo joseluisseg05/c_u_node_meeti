@@ -1,5 +1,8 @@
-const Usuarios = require('../models/Usuarios');
 const { body, validationResult } = require('express-validator');
+
+const enviarEmail = require('../handlers/emails');
+
+const Usuarios = require('../models/Usuarios');
 
 exports.formCrearCuenta = (req, res) =>{
     res.render('crear-cuenta', {
@@ -20,11 +23,22 @@ exports.crearCuenta = async(req, res) => {
     const erroresExpress = validationResult(req);
 
     try {
-        const nuevo = await Usuarios.create(usuario);
+        await Usuarios.create(usuario);
+
+        const url = `http://${req.headers.host}/confirmar-cuenta/${usuario.email}`;
+
+        await enviarEmail.enviar({
+            usuario,
+            url,
+            subject: 'Confirmar Cuenta',
+            archivo: 'confirmar-cuenta'
+        })
 
         req.flash('exito', 'Hemos envio un correo para confirmar tu cuenta');
         res.redirect('/iniciar-sesion');
     } catch (error) {
+        console.log(error);
+
         const erroresSequ = error.errors.map(err => err.message);
         const errExp = erroresExpress.array().map(err => err.msg);
 
@@ -40,4 +54,24 @@ exports.formIniciarSesion = (req, res) =>{
     res.render('iniciar-sesion', {
         nombrePag: 'Iniciar Sesión'
     });
+}
+
+exports.confirmarCuenta = async(req, res, next) => {
+    const usuario = await Usuarios.findOne({
+        where: {
+            email: req.params.correo
+        }
+    });
+
+    if(!usuario){
+        req.flash('error','No existe esa cuenta');
+        res.redirect('/crear-cuenta');
+        return next();
+    }
+
+    usuario.activo = 1;
+    await usuario.save();
+
+    req.flash('exito','Cuenta confirmada, ya puedes iniciar sesión');
+    res.redirect('/iniciar-sesion');
 }
