@@ -8,6 +8,7 @@ const path = require('path');
 
 const router = require('./router');
 const db = require('./config/db');
+const passport = require('./config/passport');
 
 db.sync().then(() => console.log('DB OK')).catch((error) => console.log(error));
 
@@ -32,6 +33,9 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(flash());
 
