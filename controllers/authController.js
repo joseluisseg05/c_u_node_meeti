@@ -8,7 +8,7 @@ exports.authUser = passport.authenticate('local',{
 });
 
 exports.isAuth = (req, res, next) => {
-    if(req.isAuthenticated) return next();
+    if(req.isAuthenticated()) return next();
 
     return res.redirect('/iniciar-sesion');
 }

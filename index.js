@@ -14,6 +14,8 @@ db.sync().then(() => console.log('DB OK')).catch((error) => console.log(error));
 
 require('dotenv').config({path: '.env'});
 require('./models/Usuarios');
+require('./models/Categorias');
+require('./models/Grupos');
 
 const app = express();
 
@@ -41,6 +43,7 @@ app.use(flash());
 
 //middlewares
 app.use((req, res, next) => {
+    res.locals.usuario = {...req.user} || null;
     res.locals.mensajes = req.flash();
     const fecha = new Date();
     res.locals.year = fecha.getFullYear();

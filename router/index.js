@@ -4,6 +4,7 @@ const homeC = require('../controllers/homeController');
 const usuariosC = require('../controllers/usuariosController');
 const authC = require('../controllers/authController');
 const adminC = require('../controllers/adminController');
+const grupC = require('../controllers/gruposController');
 
 const router = Router();
 
@@ -21,6 +22,10 @@ module.exports = () => {
 
     //admin
     router.get('/administracion', authC.isAuth, adminC.panelAdmin);
+
+    //nuevo grupo
+    router.get('/nuevo-grupo', authC.isAuth, grupC.formNuevoGrupo);
+    router.post('/nuevo-grupo', grupC.crearNuevo);
 
     return router;
 }
