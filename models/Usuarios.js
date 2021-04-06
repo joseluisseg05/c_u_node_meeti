@@ -14,7 +14,7 @@ const Usuarios = db.define('usuarios', {
     email: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        validator: {
+        validate: {
             isEmail: { 
                 msg: 'Agrega un correo valido'
             }
@@ -28,7 +28,7 @@ const Usuarios = db.define('usuarios', {
         type: Sequelize.STRING(60),
         allowNull: false,
         validate: {
-            notEmpy: {
+            notEmpty: {
                 msg: 'El password no debe de ir vacio'
             }
         }
