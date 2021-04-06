@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-const { v4: uuidv4 } = require('uuid');
 
 const db = require('../config/db');
 const Categorias = require('./Categorias');
@@ -9,8 +8,7 @@ const Grupos = db.define('grupos', {
     id: {
         type: Sequelize.UUID,
         primaryKey: true,
-        allowNull: false,
-        defaultValue: uuidv4()
+        allowNull: false
     },
     nombre: {
         type: Sequelize.TEXT(100),

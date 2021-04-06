@@ -25,7 +25,7 @@ module.exports = () => {
 
     //nuevo grupo
     router.get('/nuevo-grupo', authC.isAuth, grupC.formNuevoGrupo);
-    router.post('/nuevo-grupo', grupC.crearNuevo);
+    router.post('/nuevo-grupo', grupC.subirImagen, grupC.crearNuevo);
 
     return router;
 }
