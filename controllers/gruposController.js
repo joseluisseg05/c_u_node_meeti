@@ -1,7 +1,7 @@
 const { body } = require('express-validator');
 const multer = require('multer');
 const shortId = require('shortid');
-const { v4: uuidv4 } = require('uuid');
+const { v4:uuid } = require('uuid');
 
 const Categorias = require('../models/Categorias');
 const Grupos = require('../models/Grupos');
@@ -48,7 +48,7 @@ exports.crearNuevo = async(req, res) => {
     const grupo = req.body;
     grupo.usuarioId = req.user.id;
     
-    grupo.id = uuidv4();
+    grupo.id = uuid();
     
     if(req.file) // si hay una imagan en la req asigna 
         grupo.imagen = req.file.filename;
@@ -92,3 +92,43 @@ exports.subirImagen = (req, res, next) => {
     })
 } 
 
+exports.formEditar = async(req, res) => {
+    const consultas = [
+        Grupos.findByPk(req.params.grupoId),
+        Categorias.findAll()
+    ]
+
+    const [ grupo, categorias ] = await Promise.all(consultas);
+
+    res.render('editar-grupo', {
+        nombrePag: 'Editar Grupo - '+grupo.nombre,
+        grupo,
+        categorias
+    })
+}
+
+exports.editarData = async (req, res) => {
+    const grupo =await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
+
+    if(!grupo) {
+        req.flash('error', 'Operación no válida')
+        res.redirect('/administracion');
+        return next();
+    }
+
+    const { nombre, descripcion, url, categoriaId} = req.body;
+
+    grupo.nombre = nombre;
+    grupo.descripcion = descripcion;
+    grupo.ur = url;
+    grupo.categoriaId = categoriaId;
+
+    await grupo.save()
+    req.flash('exito', 'Cambios Almacenados Correctament');
+    res.redirect('/administracion');
+}

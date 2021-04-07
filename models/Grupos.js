@@ -6,12 +6,12 @@ const Usuarios = require('./Usuarios');
 
 const Grupos = db.define('grupos', {
     id: {
-        type: Sequelize.UUID,
+        type: Sequelize.DataTypes.UUID,
         primaryKey: true,
         allowNull: false
     },
     nombre: {
-        type: Sequelize.TEXT(100),
+        type: Sequelize.TEXT,
         allowNull: false,
         validate: {
             notEmpty: {
