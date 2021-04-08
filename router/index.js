@@ -34,5 +34,9 @@ module.exports = () => {
     router.get('/imagen-grupo/:grupoId', authC.isAuth, grupC.formImagen);
     router.post('/imagen-grupo/:grupoId', authC.isAuth, grupC.subirImagen, grupC.editarImagen);
 
+    //eliminar grupo
+    router.get('/eliminar-grupo/:grupoId', authC.isAuth, grupC.formEliminar);
+    router.post('/eliminar-grupo/:grupoId', authC.isAuth, grupC.eliminar);
+
     return router;
 }

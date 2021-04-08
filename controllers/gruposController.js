@@ -179,3 +179,54 @@ exports.editarImagen = async(req, res, next) => {
     res.redirect('/administracion');
 
 }
+
+exports.formEliminar = async(req, res) => {
+    const grupo = await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
+
+    if(!grupo) {
+        req.flash('error', 'Operación no Válida');
+        res.redirect('/administracion');
+        return next();
+    }
+
+    res.render('eliminar-grupo',{
+        nombrePag: 'Eliminar Grupo ' +grupo.nombre,
+    });
+}
+
+exports.eliminar = async(req, res, next) => {
+    const grupo = await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
+    
+    if(!grupo) {
+        req.flash('error', 'Operación no Válida');
+        res.redirect('/administracion');
+        return next();
+    }
+
+    if(grupo.imagen ){
+        const imgAntePath = __dirname + `/../public/uploads/grupos/${grupo.imagen}`;
+        fs.unlink(imgAntePath, (error)=> {
+            if(error) console.log(error) 
+            return;
+        });
+    }
+
+    await Grupos.destroy({
+        where: {
+            id: req.params.grupoId
+        }
+    });
+
+    req.flash('exito', 'Tu grupo se a eliminado');
+    res.redirect('/administracion')
+}
