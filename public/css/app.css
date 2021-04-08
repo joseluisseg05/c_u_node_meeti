@@ -416,6 +416,14 @@ form .informacion {
 form .informacion:last-of-type{
     margin-bottom: 1rem;
 }
+.informacion-busqueda {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.informacion-busqueda small{
+    color: #333;
+    font-size: 1rem;
+}
 .default-form .campo label {
     flex: 0 0 120px;
 }
