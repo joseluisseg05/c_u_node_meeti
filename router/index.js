@@ -5,6 +5,7 @@ const usuariosC = require('../controllers/usuariosController');
 const authC = require('../controllers/authController');
 const adminC = require('../controllers/adminController');
 const grupC = require('../controllers/gruposController');
+const meetiC = require('../controllers/meetiController');
 
 const router = Router();
 
@@ -37,6 +38,8 @@ module.exports = () => {
     //eliminar grupo
     router.get('/eliminar-grupo/:grupoId', authC.isAuth, grupC.formEliminar);
     router.post('/eliminar-grupo/:grupoId', authC.isAuth, grupC.eliminar);
+
+    router.get('/nuevo-meeti', authC.isAuth, meetiC.formNuevo);
 
     return router;
 }
