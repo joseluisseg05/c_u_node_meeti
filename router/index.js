@@ -31,5 +31,8 @@ module.exports = () => {
     router.get('/editar-grupo/:grupoId', authC.isAuth, grupC.formEditar);
     router.post('/editar-grupo/:grupoId', authC.isAuth, grupC.editarData);
 
+    router.get('/imagen-grupo/:grupoId', authC.isAuth, grupC.formImagen);
+    router.post('/imagen-grupo/:grupoId', authC.isAuth, grupC.subirImagen, grupC.editarImagen);
+
     return router;
 }

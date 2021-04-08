@@ -3,6 +3,8 @@ const multer = require('multer');
 const shortId = require('shortid');
 const { v4:uuid } = require('uuid');
 
+const fs = require('fs');
+
 const Categorias = require('../models/Categorias');
 const Grupos = require('../models/Grupos');
 
@@ -131,4 +133,49 @@ exports.editarData = async (req, res) => {
     await grupo.save()
     req.flash('exito', 'Cambios Almacenados Correctament');
     res.redirect('/administracion');
+}
+
+exports.formImagen = async(req, res) => {
+    const grupo =await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
+
+    res.render('imagen-grupo', {
+        nombrePag: 'Editar imagen de ' + grupo.nombre,
+        grupo,
+    })
+}
+
+exports.editarImagen = async(req, res, next) => {
+    const grupo =await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
+
+    if(! grupo) {
+        req.flash('error', 'Operacion no valuda');
+        res.redirect('/iniciar-sesion');
+        return next();
+    }
+
+    if(req.file && grupo.imagen ){
+        const imgAntePath = __dirname + `/../public/uploads/grupos/${grupo.imagen}`;
+        fs.unlink(imgAntePath, (error)=> {
+            if(error) console.log(error) 
+            return;
+        })
+    }
+
+    if(req.file)
+        grupo.imagen = req.file.filename;
+
+    await grupo.save();
+    req.flash('exito', 'Cambios Almacenados Correctamente');
+    res.redirect('/administracion');
+
 }
