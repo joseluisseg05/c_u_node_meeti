@@ -34,7 +34,6 @@ const results = L.layerGroup().addTo(map);
 
 searchControl.on("results", (data) => {
     results.clearLayers();
-    console.log(searchControl);
     for (let i = data.results.length - 1; i >= 0; i--) {
         marker = L.marker(data.results[i].latlng, {
             draggable: true,
@@ -45,6 +44,8 @@ searchControl.on("results", (data) => {
         );
         results.addLayer(marker);
         marker.openPopup();
+
+        llenarInputs(data.results[i].properties);
 
         mover();
     }
@@ -57,7 +58,6 @@ function mover () {
         results.clearLayers();
         marker = e.target;
         const posicion = marker.getLatLng();
-        console.log(posicion);
         geocoder
             .reverse()
             .latlng(posicion)
@@ -67,11 +67,23 @@ function mover () {
                     draggable: true,
                     autoPan: true,
                 });
-                console.log(result);
                 marker.bindPopup(`<b>${result.address.PlaceName}</b><p>${result.address.LongLabel}</p>`);
                 results.addLayer(marker);
                 marker.openPopup();
+
+                llenarInputs(result.address);
+                
                 mover ()
             });
     });
 } 
+
+function llenarInputs(resultado) {
+    //console.log(resultado);
+    document.querySelector('#direccion').value = resultado.Match_addr;
+    document.querySelector('#ciudad').value = resultado.City;
+    document.querySelector('#estado').value = resultado.Region;
+    document.querySelector('#pais').value = resultado.Country;
+    document.querySelector('#lat').value = resultado.DisplayX;
+    document.querySelector('#lng').value = resultado.DisplayY;
+}
