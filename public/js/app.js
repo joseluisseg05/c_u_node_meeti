@@ -44,8 +44,18 @@ searchControl.on("results", (data) => {
         );
         results.addLayer(marker);
         marker.openPopup();
+        //console.log(data.results[i])
+        
+        const dataInfo = {
+            direccion: data.results[i].properties.ShortLabel + ", " +  data.results[i].properties.Nbrhd,
+            ciudad: data.results[i].properties.City,
+            estado: data.results[i].properties.Region,
+            pais: data.results[i].properties.Country,
+            lat:  data.results[i].latlng.lat,
+            lng: data.results[i].latlng.lng,
+        }
 
-        llenarInputs(data.results[i].properties);
+        llenarInputs(dataInfo);    
 
         mover();
     }
@@ -71,8 +81,19 @@ function mover () {
                 results.addLayer(marker);
                 marker.openPopup();
 
-                llenarInputs(result.address);
-                
+                //console.log(result.address)
+
+                const dataInfo = {
+                    direccion: result.address.ShortLabel + ", " +  result.address.Neighborhood,
+                    ciudad: result.address.City,
+                    estado: result.address.Region,
+                    pais: result.address.CountryCode,
+                    lat: result.latlng.lat,
+                    lng: result.latlng.lng
+                }
+        
+                llenarInputs(dataInfo);    
+
                 mover ()
             });
     });
@@ -80,10 +101,10 @@ function mover () {
 
 function llenarInputs(resultado) {
     //console.log(resultado);
-    document.querySelector('#direccion').value = resultado.Match_addr;
-    document.querySelector('#ciudad').value = resultado.City;
-    document.querySelector('#estado').value = resultado.Region;
-    document.querySelector('#pais').value = resultado.Country;
-    document.querySelector('#lat').value = resultado.DisplayX;
-    document.querySelector('#lng').value = resultado.DisplayY;
+    document.querySelector('#direccion').value = resultado.direccion;
+    document.querySelector('#ciudad').value = resultado.ciudad;
+    document.querySelector('#estado').value = resultado.estado;
+    document.querySelector('#pais').value = resultado.pais;
+    document.querySelector('#lat').value = resultado.lat;
+    document.querySelector('#lng').value = resultado.lng;
 }
