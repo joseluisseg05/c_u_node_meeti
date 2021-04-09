@@ -16,6 +16,7 @@ require('dotenv').config({path: '.env'});
 require('./models/Usuarios');
 require('./models/Categorias');
 require('./models/Grupos');
+require('./models/Meeti');
 
 const app = express();
 

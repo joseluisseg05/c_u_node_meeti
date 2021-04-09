@@ -40,6 +40,7 @@ module.exports = () => {
     router.post('/eliminar-grupo/:grupoId', authC.isAuth, grupC.eliminar);
 
     router.get('/nuevo-meeti', authC.isAuth, meetiC.formNuevo);
+    router.post('/nuevo-meeti', authC.isAuth, meetiC.sanitizar, meetiC.crearMeeti);
 
     return router;
 }
