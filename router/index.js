@@ -51,5 +51,9 @@ module.exports = () => {
     router.get('/eliminar-meeti/:id', authC.isAuth, meetiC.formEliminar);
     router.post('/eliminar-meeti/:id', authC.isAuth, meetiC.eliminarData);
 
+    //editar perfil 
+    router.get('/editar-perfil/', authC.isAuth, usuariosC.formEditar);
+    router.post('/editar-perfil/', authC.isAuth, usuariosC.sanitizar, usuariosC.editarPerfil);
+
     return router;
 }

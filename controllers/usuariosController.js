@@ -75,3 +75,37 @@ exports.confirmarCuenta = async(req, res, next) => {
     req.flash('exito','Cuenta confirmada, ya puedes iniciar sesión');
     res.redirect('/iniciar-sesion');
 }
+
+//editar perfil 
+exports.formEditar = async(req, res) => {
+    const usuario = await Usuarios.findByPk(req.user.id);
+
+    res.render('editar-perfil', {
+        nombrePag: 'Editar perfil de ' + usuario.nombre,
+        usuario
+    })
+}
+
+exports.editarPerfil = async (req, res) => {
+    const usuario = await Usuarios.findByPk(req.user.id);
+    const {nombre, descripcion, email} = req.body;
+
+    usuario.nombre = nombre;
+    usuario.descripcion = descripcion;
+    usuario.email = email;
+
+    await usuario.save()
+
+    req.flash('exito', 'Actualización de datos correcto');
+    res.redirect('/administracion');
+}
+
+exports.sanitizar = async(req, res, next) => {
+    const reglas = [
+        body('nombre').trim().escape(),
+        body('email').trim()
+    ]
+    await Promise.all(reglas.map(validacion => validacion.run(req)));
+
+    next()
+}
