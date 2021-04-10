@@ -21,6 +21,9 @@ module.exports = () => {
     router.get('/iniciar-sesion', usuariosC.formIniciarSesion);
     router.post('/iniciar-sesion', authC.authUser);
 
+    //cerrar sesion
+    router.get('/cerrar-sesion', authC.isAuth, authC.cerrarSesion);
+
     //admin
     router.get('/administracion', authC.isAuth, adminC.panelAdmin);
 

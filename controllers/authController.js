@@ -12,3 +12,10 @@ exports.isAuth = (req, res, next) => {
 
     return res.redirect('/iniciar-sesion');
 }
+
+exports.cerrarSesion = (req, res, next) => {
+    req.logout();
+    req.flash('correcto', 'Cerraste Sesion Correctamente');
+    res.redirect('/iniciar-sesion');
+    next();
+}
