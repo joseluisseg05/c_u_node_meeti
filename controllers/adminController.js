@@ -1,6 +1,9 @@
 const Grupos = require('../models/Grupos');
 const Meeti = require('../models/Meeti');
 
+const moment = require('moment');
+const { Op } = require('sequelize');
+
 exports.panelAdmin = async(req, res) => {
     const consulta = [
         Grupos.findAll({
@@ -10,15 +13,28 @@ exports.panelAdmin = async(req, res) => {
         }),
         Meeti.findAll({
             where: {
-                usuarioId: req.user.id
+                usuarioId: req.user.id,
+                fecha: {
+                    [Op.gte] : moment(new Date()).format("YYYY-MM-DD")//si la fecha es mayor que hoy muestra
+                }
+            }
+        }),
+        Meeti.findAll({
+            where: {
+                usuarioId: req.user.id,
+                fecha: {
+                    [Op.lt] : moment(new Date()).format("YYYY-MM-DD")//si la fecha es menor que hoy muestra
+                }
             }
         })
     ]
-    const [ grupos, meeti] = await Promise.all(consulta);
+    const [ grupos, meeti, anteriores] = await Promise.all(consulta);
 
     res.render('administracion', {
         nombrePag: 'Panel de Administración',
         grupos,
-        meeti
+        meeti,
+        moment, //para la libreria a la vista
+        anteriores
     })
 }
