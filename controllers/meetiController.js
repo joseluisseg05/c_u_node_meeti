@@ -74,6 +74,79 @@ exports.formEditarMeeti = async (req, res, next) => {
     })
 }
 
+exports.editarData = async(req, res, next) => {
+    const meeti = await Meeti.findOne({
+        where: {
+            id: req.params.id,
+            usuarioId: req.user.id
+        }
+    });
+
+    if(!meeti) {
+        req.flash('error', 'Operación no valida');
+        res.redirect('/administracion');
+        return next()
+    }
+
+    const { grupoId, titulo, invitado, fecha, hora, cupo,
+        descripcion, direccion, ciudad, estado, pais, lat, lng } = req.body;
+    
+    meeti.grupoId = grupoId;
+    meeti.titulo = titulo;
+    meeti.invitado = invitado;
+    meeti.fecha = fecha;
+    meeti.hora = hora;
+    meeti.cupo = cupo;
+    meeti.descripcion = descripcion;
+    meeti.direccion = direccion;
+    meeti.ciudad = ciudad;
+    meeti.estado = estado;
+    meeti.pais = pais;
+
+    const point = {
+        type: 'Point', 
+        coordinates: [parseFloat(lat), parseFloat(lng)]
+    }
+    meeti.ubicacion = point;
+
+    await meeti.save();
+
+    req.flash('exito', 'Se ha actualizado el Meeti con exito');
+    res.redirect('/administracion'); 
+}
+
+exports.formEliminar = async(req, res, next) => {
+    const meeti = await Meeti.findOne({
+        where: {
+            id: req.params.id,
+            usuarioId: req.user.id
+        }
+    });
+
+    if(!meeti){
+        req.flash('error', 'Operación no valida');
+        res.redirect('/administracion');
+        return next()
+    }
+
+    res.render('eliminar-meeti', {
+        nombrePag: 'Eliminar Meeti - '+ meeti.titulo
+    })
+}
+
+exports.eliminarData = async(req, res) => {
+
+    await meeti.destroy({
+        where: {
+            id: req.params.id,
+            usuarioId: req.user.id
+        }
+    });
+
+    req.flash('exito', 'Tu meeti se a eliminado');
+    res.redirect('/administracion')
+}
+
 exports.sanitizar = async(req, res, next) => {
     const reglas = [
         body('titulo').trim().escape(),

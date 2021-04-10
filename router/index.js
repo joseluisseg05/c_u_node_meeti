@@ -45,6 +45,11 @@ module.exports = () => {
 
     //editar meeti
     router.get('/editar-meeti/:id', authC.isAuth, meetiC.formEditarMeeti);
+    router.post('/editar-meeti/:id', authC.isAuth, meetiC.sanitizar, meetiC.editarData);
+
+    //eliminar meeti
+    router.get('/eliminar-meeti/:id', authC.isAuth, meetiC.formEliminar);
+    router.post('/eliminar-meeti/:id', authC.isAuth, meetiC.eliminarData);
 
     return router;
 }
