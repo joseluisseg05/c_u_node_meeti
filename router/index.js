@@ -59,5 +59,9 @@ module.exports = () => {
     router.get('/reset-pass', authC.isAuth, usuariosC.formCambiarPass);
     router.post('/reset-pass', authC.isAuth, usuariosC.cambiarPass);
 
+    //imagen de perfil 
+    router.get('/imagen-perfil', authC.isAuth, usuariosC.formImagen);
+    router.post('/imagen-perfil', authC.isAuth, usuariosC.subirImagen, usuariosC.guardarImagen);
+
     return router;
 }

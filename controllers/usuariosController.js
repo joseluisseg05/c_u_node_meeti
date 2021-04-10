@@ -1,8 +1,34 @@
 const { body, validationResult } = require('express-validator');
+const multer = require('multer');
+const shortId = require('shortid');
+
+const fs = require('fs');
 
 const enviarEmail = require('../handlers/emails');
-
 const Usuarios = require('../models/Usuarios');
+
+const configMulter = {
+    limits: {
+        fileSize: 100000
+    },
+    storage: fileStorage = multer.diskStorage({
+        destination: (req, res, next) => {
+            next(null, __dirname + '/../public/uploads/perfiles/');
+        },
+        filename: (req, file, next) => {
+            const extencion = file.mimetype.split('/')[1];//obtner los datos de la opcion 1
+            next(null, `${shortId.generate()}.${extencion}`);
+        }
+    }),
+    fileFilter(req, file, next ) {
+        if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png')
+            next(null, true)
+        else 
+            next(new Error('Formato de Imagen no valido'), false)
+    }
+}
+
+const upload = multer(configMulter).single('imagen');
 
 exports.formCrearCuenta = (req, res) =>{
     res.render('crear-cuenta', {
@@ -135,4 +161,55 @@ exports.cambiarPass = async(req, res, next) => {
     req.logout();
     req.flash('exito', 'Contraseña Actualizada');
     res.redirect('/iniciar-sesion');
+}
+
+exports.formImagen = async(req, res) => {
+    const usuario = await Usuarios.findByPk(req.user.id);
+
+    res.render('imagen-perfil', {
+        nombrePag: 'Subir Imagen de Perfil',
+        usuario
+    })
+}
+
+exports.subirImagen = (req, res, next) => {
+    upload(req, res, function(error) {
+        if(error) {
+            console.log(error);
+
+            if(error instanceof multer.MulterError) {
+                if (error.code === 'LIMIT_FILE_SIZE') {
+                    req.flash('error', 'La imagen que trata de subir es muy grande: Maximo 100Kb ');
+                } else {
+                    req.flash('error', req.message);
+                }
+            } else if (error.hasOwnProperty('message')){ 
+                // revisa si existe un propiedas con el nombre ejemplo 
+                //usuarios: {"message": "este un es mensaje"}
+                req.flash('error', error.message);
+            }
+            res.redirect('back');
+            return;
+        } else 
+            next()
+    })
+} 
+
+exports.guardarImagen = async(req, res) => {
+    const usuario =await Usuarios.findByPk(req.user.id);
+
+    if(req.file && usuario.imagen ){
+        const imgAntePath = __dirname + `/../public/uploads/perfiles/${usuario.imagen}`;
+        fs.unlink(imgAntePath, (error)=> {//eliminar imagen anterior 
+            if(error) console.log(error) 
+            return;
+        })
+    }
+
+    if(req.file)
+        usuario.imagen = req.file.filename;
+
+    await usuario.save();
+    req.flash('exito', 'Cambios Almacenados Correctamente');
+    res.redirect('/administracion');
 }
