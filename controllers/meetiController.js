@@ -49,6 +49,31 @@ exports.crearMeeti = async(req, res) => {
     }
 }
 
+exports.formEditarMeeti = async (req, res, next) => {
+    const consultas = [
+        Grupos.findAll({
+            where: {
+                usuarioId: req.user.id
+            }
+        }),
+        Meeti.findByPk(req.params.id),
+    ]
+
+    const [grupos, meeti] = await Promise.all(consultas);
+
+    if(!grupos || !meeti) {
+        req.flash('error', 'Operación no valida');
+        res.redirect('/administracion');
+        return next()
+    }
+
+    res.render('editar-meeti', {
+        nombrePag: 'Editar Meeti - '+meeti.titulo,
+        grupos,
+        meeti
+    })
+}
+
 exports.sanitizar = async(req, res, next) => {
     const reglas = [
         body('titulo').trim().escape(),

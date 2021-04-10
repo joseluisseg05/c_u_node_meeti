@@ -1,5 +1,8 @@
-const lat = 20.056117;
-const lng = -98.761509;
+//obtener los dtaos de la vista 
+
+const lat = document.querySelector('#lat').value || 20.056117;
+const lng = document.querySelector('#lng').value || -98.761509;
+const direccionData = document.querySelector('#direccion').value || '';
 
 const apiKey = "AAPKf94ed90ce654499d92557d52123461a4r3rEGC5hDfH50MLuTIJNqTryH4dWxATZtPcCzzkUJtS_EfUlxC90laXR_-ZLJctS";
 const basemapEnum = "ArcGIS:Navigation";
@@ -61,7 +64,18 @@ searchControl.on("results", (data) => {
     }
 });
 
+//colocar el pin en edicion 
+if(lat && lng){
+    marker = L.marker([lat, lng], {
+        draggable: true,
+        autoPan: true,
+    });
+    marker.bindPopup(`<b>Ubicación Actual del meeti</b><p>${direccionData}</p>`);
+    results.addLayer(marker);
+    marker.openPopup();
 
+    mover()
+}
 
 function mover () {
     marker.on("moveend", function (e) {
