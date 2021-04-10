@@ -55,5 +55,9 @@ module.exports = () => {
     router.get('/editar-perfil/', authC.isAuth, usuariosC.formEditar);
     router.post('/editar-perfil/', authC.isAuth, usuariosC.sanitizar, usuariosC.editarPerfil);
 
+    //cmabiar Pass
+    router.get('/reset-pass', authC.isAuth, usuariosC.formCambiarPass);
+    router.post('/reset-pass', authC.isAuth, usuariosC.cambiarPass);
+
     return router;
 }

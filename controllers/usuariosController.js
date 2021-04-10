@@ -109,3 +109,30 @@ exports.sanitizar = async(req, res, next) => {
 
     next()
 }
+
+exports.formCambiarPass = (req, res) => {
+    resr.render('reset-pass', {
+        nombrePag: 'Cambiar Contraseña',
+
+    })
+}
+
+exports.cambiarPass = async(req, res, next) => {
+    const usuario = await Usuarios.findByPk(req.user.id);
+
+    if(!usuario.validarPassword(req.body.anterior)){//comparar pass
+        req.flash('error', 'Contraseña Actual incorrecto');
+        res.redirect('/administracion');
+        return next()
+    }
+
+    const hash = usuario.hashPassword(req.body.nuevo);
+
+    usuario.password = hash;
+
+    await usuario.save()
+
+    req.logout();
+    req.flash('exito', 'Contraseña Actualizada');
+    res.redirect('/iniciar-sesion');
+}

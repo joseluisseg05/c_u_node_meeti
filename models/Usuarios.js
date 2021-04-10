@@ -43,14 +43,24 @@ const Usuarios = db.define('usuarios', {
 }, {
     hooks: {
         beforeCreate(usuario) {
-            usuario.password = bcrypt.hashSync(usuario.password, bcrypt.genSaltSync(11), null);
+            usuario.password = Usuarios.prototype.hashPassword(usuario.password);
         }
     }
 });
 
+
+/*
+* la diferencia de los hooks y los prototype es que 
+* en los prototype nosotros decidimos si usarlo y en que parte del codigo
+* y los hooks simpre se va a ejecutar segun sea el tipo
+*/
 //comparar pass
 Usuarios.prototype.validarPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
+}
+
+Usuarios.prototype.hashPassword= function(password) {
+    return  bcrypt.hashSync(password, bcrypt.genSaltSync(11), null);
 }
 
 module.exports = Usuarios;
