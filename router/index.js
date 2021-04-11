@@ -7,11 +7,19 @@ const adminC = require('../controllers/adminController');
 const grupC = require('../controllers/gruposController');
 const meetiC = require('../controllers/meetiController');
 
+//constroller del frontend
+const meetiCFE = require('../controllers/frontend/meetiControllerFE');
+
+
 const router = Router();
 
 module.exports = () => {
 
+    /*Area Publica */
     router.get('/', homeC.home);
+
+    //mostrar el meeti
+    router.get('/meeti/:slug', meetiCFE.mostrarMeeti, );
 
     router.get('/crear-cuenta', usuariosC.formCrearCuenta);
     router.post('/crear-cuenta', usuariosC.crearCuenta);
@@ -24,6 +32,7 @@ module.exports = () => {
     //cerrar sesion
     router.get('/cerrar-sesion', authC.isAuth, authC.cerrarSesion);
 
+    /*Area Privada */
     //admin
     router.get('/administracion', authC.isAuth, adminC.panelAdmin);
 
