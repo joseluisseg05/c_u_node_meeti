@@ -8,6 +8,9 @@ const Categorias = db.define('categorias', {
         autoIncrement: true
     }, 
     nombre: Sequelize.TEXT,
+    slug: Sequelize.TEXT
+}, {
+    timestamps: false //quitar los campos de creado y editar 
 });
 
 module.exports = Categorias;

@@ -17,7 +17,10 @@ exports.panelAdmin = async(req, res) => {
                 fecha: {
                     [Op.gte] : moment(new Date()).format("YYYY-MM-DD")//si la fecha es mayor que hoy muestra
                 }
-            }
+            },
+            order: [
+                ['fecha', 'ASC']
+            ]
         }),
         Meeti.findAll({
             where: {
