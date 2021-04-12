@@ -9,6 +9,7 @@ const meetiC = require('../controllers/meetiController');
 
 //constroller del frontend
 const meetiCFE = require('../controllers/frontend/meetiControllerFE');
+const userCFE = require('../controllers/frontend/usuariosControllerFE');
 
 
 const router = Router();
@@ -26,6 +27,9 @@ module.exports = () => {
 
     //asistentes al meeti
     router.get('/asistentes/:slug', meetiCFE.mostrarAsistentes);
+
+    //mostrar perfil 
+    router.get('/usuarios/:id', userCFE.mostrarUsuario);
 
     router.get('/crear-cuenta', usuariosC.formCrearCuenta);
     router.post('/crear-cuenta', usuariosC.crearCuenta);
