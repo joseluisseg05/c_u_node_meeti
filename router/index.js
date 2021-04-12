@@ -10,6 +10,7 @@ const meetiC = require('../controllers/meetiController');
 //constroller del frontend
 const meetiCFE = require('../controllers/frontend/meetiControllerFE');
 const userCFE = require('../controllers/frontend/usuariosControllerFE');
+const grupCFE = require('../controllers/frontend/gruposController');
 
 
 const router = Router();
@@ -30,6 +31,9 @@ module.exports = () => {
 
     //mostrar perfil 
     router.get('/usuarios/:id', userCFE.mostrarUsuario);
+
+    //mostrar grupos
+    router.get('/grupos/:id', grupCFE.mostrarGrupo);
 
     router.get('/crear-cuenta', usuariosC.formCrearCuenta);
     router.post('/crear-cuenta', usuariosC.crearCuenta);
