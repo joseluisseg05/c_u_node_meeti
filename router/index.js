@@ -21,6 +21,12 @@ module.exports = () => {
     //mostrar el meeti
     router.get('/meeti/:slug', meetiCFE.mostrarMeeti, );
 
+    //confirma asistencia a meeti
+    router.post('/confirmar-asistencia/:slug', meetiCFE.confirmarAsistencia, );
+
+    //asistentes al meeti
+    router.get('/asistentes/:slug', meetiCFE.mostrarAsistentes);
+
     router.get('/crear-cuenta', usuariosC.formCrearCuenta);
     router.post('/crear-cuenta', usuariosC.crearCuenta);
     router.get('/confirmar-cuenta/:correo', usuariosC.confirmarCuenta);

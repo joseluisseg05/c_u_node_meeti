@@ -1,3 +1,5 @@
+import asistencia from './asistencia';
+
 //obtener los dtaos de la vista 
 
 const lat = document.querySelector('#lat').value || 20.056117;
