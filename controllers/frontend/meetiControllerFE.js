@@ -1,5 +1,5 @@
 const moment = require('moment');
-const Sequelize = require('sequelize');
+const {Sequelize, Op} = require('sequelize');
 
 const Meeti = require('../../models/Meeti');
 const Grupos = require('../../models/Grupos');
@@ -26,6 +26,29 @@ exports.mostrarMeeti = async(req, res) => {
     if(!meeti) 
         res.redirect('/')
 
+    //consultar meetis cercanos, genera un punto en un mapa interno
+    const ubicacion = Sequelize.literal(`ST_GeomFromText( 'POINT(${meeti.ubicacion.coordinates[0]} ${meeti.ubicacion.coordinates[1]})')`);
+    //la funcion retorna la distancia en metros 
+    const distancia =Sequelize.fn('ST_DistanceSphere', Sequelize.col('ubicacion'), ubicacion);
+    //encontrar meetis cercanos
+    const cercanos = await Meeti.findAll({
+        order: distancia, //ordena del mas cercano al mas lejano 
+        where: Sequelize.where(distancia, { //obtinen el campo interno que se generara 
+            [Op.lte] : 2000 //a menos de 2 kilometros
+        }),
+        limit: 3,
+        offset: 1,//ignora el primero porque es en el que estoy ##chocan cuando distintos meetis en distintas fechas son en el mismo lugar
+        include: [
+            {
+                model: Grupos
+            },
+            {
+                model: Usuarios,
+                attributes: ['id', 'nombre', 'imagen']
+            }
+        ]
+    })
+
     const comentarios = await Comentarios.findAll({
         where: {
             meetiId: meeti.id
@@ -42,7 +65,8 @@ exports.mostrarMeeti = async(req, res) => {
         nombrePag: meeti.titulo,
         meeti,
         moment,
-        comentarios
+        comentarios,
+        cercanos
     })
 }
 

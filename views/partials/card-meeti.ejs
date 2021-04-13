@@ -1,0 +1,29 @@
+<div class="card">
+    <% if (meet.grupo.imagen) { %>
+        <img src="/uploads/grupos/<%= meet.grupo.imagen %>" alt="Imagen de <%= meet.grupo.titulo %> ">
+    <% } else { %>
+        <img src="/img/logo.png" alt="">
+    <% } %>
+    <div class="card-texto">
+        <% const fecha = moment(meet.fecha).format('dddd D MMMM YYYY'); %>
+        <% const hora = moment(meet.fecha + ' ' + meet.hora).format('h:mm A'); %>  
+        <p class="fecha"><%= fecha.charAt(0).toUpperCase() + fecha.slice(1) %> a las <%= hora %></p>
+        <a href="/meeti/<%= meet.slug %>">
+            <h3><%= meet.titulo %> </h3>
+        </a>
+        <div class="info-autor">                        
+            <% if (meet.usuario.imagen) { %>
+                <div class="imagen">
+                    <img src="/uploads/perfiles/<%= meet.usuario.imagen %> ">
+                </div>
+            <% } else { %>
+                <div class="imagen"></div>
+            <% } %>
+            <div class="informacion">
+                <p>Organizado por:</p>
+                <p class="autor"><%= meet.usuario.nombre %> </p>
+            </div>
+        </div>
+
+    </div>
+</div>

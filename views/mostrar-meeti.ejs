@@ -118,3 +118,14 @@
         </aside>
     </div>
 </main>
+
+<h2>Meeti's Cercanos</h2>
+<div class="contenedor cercanos">
+    <% if (cercanos.length > 0) { %>
+        <% cercanos.forEach(meet => { %>
+            <%- include('partials/card-meeti.ejs', {meet: meet}); %>
+        <% }) %> 
+    <% } else { %>
+      <p>No hay Meeti's Cercanos</p>
+    <% } %> 
+</div>
