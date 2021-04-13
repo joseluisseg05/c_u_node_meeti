@@ -1,4 +1,5 @@
 import asistencia from './asistencia';
+import comentario from './eliminarComentario';
 
 //obtener los dtaos de la vista 
 

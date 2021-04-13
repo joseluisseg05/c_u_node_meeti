@@ -11,6 +11,7 @@ const meetiC = require('../controllers/meetiController');
 const meetiCFE = require('../controllers/frontend/meetiControllerFE');
 const userCFE = require('../controllers/frontend/usuariosControllerFE');
 const grupCFE = require('../controllers/frontend/gruposController');
+const comenCFE = require('../controllers/frontend/comentariosController');
 
 
 const router = Router();
@@ -28,6 +29,12 @@ module.exports = () => {
 
     //asistentes al meeti
     router.get('/asistentes/:slug', meetiCFE.mostrarAsistentes);
+
+    //comentarios meet
+    router.post('/meeti/:id', comenCFE.agregarComentario);
+
+    //elimina comentarios
+    router.post('/eliminar-comentario', comenCFE.eliminarComentario);
 
     //mostrar perfil 
     router.get('/usuarios/:id', userCFE.mostrarUsuario);

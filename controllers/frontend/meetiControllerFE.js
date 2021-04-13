@@ -5,6 +5,7 @@ const Meeti = require('../../models/Meeti');
 const Grupos = require('../../models/Grupos');
 const Usuarios = require('../../models/Usuarios');
 const Categorias = require('../../models/Categorias');
+const Comentarios = require('../../models/Comentarios');
 
 exports.mostrarMeeti = async(req, res) => {
     const meeti = await Meeti.findOne({
@@ -25,10 +26,23 @@ exports.mostrarMeeti = async(req, res) => {
     if(!meeti) 
         res.redirect('/')
 
+    const comentarios = await Comentarios.findAll({
+        where: {
+            meetiId: meeti.id
+        },
+        include: [
+            {
+                model: Usuarios,
+                attributes: ['id', 'nombre', 'imagen']
+            }
+        ]
+    })
+
     res.render('mostrar-meeti', {
         nombrePag: meeti.titulo,
         meeti,
-        moment
+        moment,
+        comentarios
     })
 }
 

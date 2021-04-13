@@ -17,6 +17,7 @@ require('./models/Usuarios');
 require('./models/Categorias');
 require('./models/Grupos');
 require('./models/Meeti');
+require('./models/Comentarios');
 
 const app = express();
 
