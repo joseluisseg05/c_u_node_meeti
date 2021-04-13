@@ -4,6 +4,7 @@ const Sequelize = require('sequelize');
 const Meeti = require('../../models/Meeti');
 const Grupos = require('../../models/Grupos');
 const Usuarios = require('../../models/Usuarios');
+const Categorias = require('../../models/Categorias');
 
 exports.mostrarMeeti = async(req, res) => {
     const meeti = await Meeti.findOne({
@@ -81,5 +82,38 @@ exports.mostrarAsistentes = async(req, res) =>{
     res.render('asistentes-meeti', {
         nombrePag: 'Listado de Asistentes Meeti',
         asistentes
+    })
+}
+
+exports.mostrarCategoria = async(req, res, next) => {
+    const categoria = await Categorias.findOne({
+        where: {
+            slug: req.params.categoria
+        },
+        attributes: ['id', 'nombre']
+    });
+    const meetis = await Meeti.findAll({
+        include: [
+            {
+                model: Grupos,
+                where: {
+                    categoriaId: categoria.id
+                }
+            },
+            {
+                model: Usuarios
+            }
+        ],
+        order: [
+            ['fecha', 'ASC'],
+            ['hora', 'ASC']
+        ]
+    });
+
+
+    res.render('categoria', {
+        nombrePag: `Categoria ${categoria.nombre}`,
+        moment,
+        meetis
     })
 }

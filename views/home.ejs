@@ -27,8 +27,8 @@
         <% if (meetis.length > 0) { %>
             <% meetis.forEach(meet => { %> 
                 <div class="card">
-                    <% if (meeti.grupo.imagen) { %>
-                        <img src="/uploads/grupos/<%= meeti.grupo.imagen %>" alt="Imagen de <%= meeti.grupo.titulo %> ">
+                    <% if (meet.grupo.imagen) { %>
+                        <img src="/uploads/grupos/<%= meet.grupo.imagen %>" alt="Imagen de <%= meet.grupo.titulo %> ">
                     <% } else { %>
                         <img src="/img/logo.png" alt="">
                     <% } %>

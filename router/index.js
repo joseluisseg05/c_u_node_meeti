@@ -35,6 +35,9 @@ module.exports = () => {
     //mostrar grupos
     router.get('/grupos/:id', grupCFE.mostrarGrupo);
 
+    //mostrar meetis por categoria
+    router.get('/categoria/:categoria', meetiCFE.mostrarCategoria);
+
     router.get('/crear-cuenta', usuariosC.formCrearCuenta);
     router.post('/crear-cuenta', usuariosC.crearCuenta);
     router.get('/confirmar-cuenta/:correo', usuariosC.confirmarCuenta);
