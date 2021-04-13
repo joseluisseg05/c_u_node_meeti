@@ -72,7 +72,8 @@
                                         <%= comentario.usuario.nombre %>
                                     </a>
                                 </p>
-                                <% if (comentario.usuario.id === usuario.id) { %>
+                                <!--si la persona que creo el comentario es la misma o si la persona que creo el meeti es la misma-->
+                                <% if (comentario.usuario.id === usuario.id || meeti.usuarioId === usuario.id) { %>
                                     <form action="/eliminar-comentario" method="POST" class="eliminar-comentario">
                                         <input type="hidden" name="idComentario" value="<%= comentario.id %>">
                                         <input type="submit" value="Eliminar" class="btn btn-azul">

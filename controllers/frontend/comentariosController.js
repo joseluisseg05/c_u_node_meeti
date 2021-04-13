@@ -26,7 +26,13 @@ exports.eliminarComentario = async (req, res, next) => {
         return next();
     }
 
-    if(comentario.usuarioId === req.user.id){
+    const meeti = await Meeti.findOne({
+        where: {
+            id: comentario.meetiId
+        }
+    })
+
+    if(comentario.usuarioId === req.user.id || meeti.usuarioId === req.user.id){
         await Comentarios.destroy({
             where: {
                 id: comentario.id
