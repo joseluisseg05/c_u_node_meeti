@@ -54,7 +54,11 @@ app.use((req, res, next) => {
 
 app.use('/', router());
 
-app.listen(process.env.PORT, () => {
+//valiables para el servidor
+const host = process.env.HOST || '0.0.0.0';
+const port =process.env.PORT || 8080;
+
+app.listen(port, host, () => {
     console.log('Servidor Online')
 })
 
