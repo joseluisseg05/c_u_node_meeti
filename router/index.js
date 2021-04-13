@@ -12,6 +12,7 @@ const meetiCFE = require('../controllers/frontend/meetiControllerFE');
 const userCFE = require('../controllers/frontend/usuariosControllerFE');
 const grupCFE = require('../controllers/frontend/gruposController');
 const comenCFE = require('../controllers/frontend/comentariosController');
+const busqCFE = require('../controllers/frontend/busquedaController');
 
 
 const router = Router();
@@ -45,6 +46,10 @@ module.exports = () => {
     //mostrar meetis por categoria
     router.get('/categoria/:categoria', meetiCFE.mostrarCategoria);
 
+    //buscador
+    router.get('/busqueda', busqCFE.resultados);
+
+    //Creacion de cuenta y confirmar
     router.get('/crear-cuenta', usuariosC.formCrearCuenta);
     router.post('/crear-cuenta', usuariosC.crearCuenta);
     router.get('/confirmar-cuenta/:correo', usuariosC.confirmarCuenta);

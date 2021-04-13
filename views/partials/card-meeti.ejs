@@ -5,6 +5,7 @@
         <img src="/img/logo.png" alt="">
     <% } %>
     <div class="card-texto">
+        <% moment.locale('es-mx') %> 
         <% const fecha = moment(meet.fecha).format('dddd D MMMM YYYY'); %>
         <% const hora = moment(meet.fecha + ' ' + meet.hora).format('h:mm A'); %>  
         <p class="fecha"><%= fecha.charAt(0).toUpperCase() + fecha.slice(1) %> a las <%= hora %></p>
